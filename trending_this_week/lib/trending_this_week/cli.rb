@@ -1,20 +1,17 @@
 class TrendingThisWeek::CLI
+
   def call
     list_spots
     menu
-
-end
+  end
 
 
 def list_spots
-  puts 'These are the spots trending in NYC this week
-
-        1.Mikkeller Brewing NYC
-
-        2.Urbanspace at 570 Lex Food Court
-
-        3.Davelle Café'
-
+  puts 'These are the spots trending in NYC this week'
+  spot_array =  TrendingThisWeek::Spots.this_week
+       spot_array.each do |spot|
+          puts "#{spot.position}. #{spot.name} - #{spot.location}"
+       end
     end
 
   def menu
