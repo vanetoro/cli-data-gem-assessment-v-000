@@ -11,4 +11,5 @@ require "trending_this_week"
 # Pry.start
 
 require "irb"
+require 'pry'
 IRB.start(__FILE__)
