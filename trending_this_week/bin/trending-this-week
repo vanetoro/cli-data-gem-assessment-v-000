@@ -1,3 +1,5 @@
 #!/usr/bin/env ruby
 
-puts 'Hello World'
+require '.lib/trending_this_week'
+
+ TrendingThisWeek::CLI.new.call
