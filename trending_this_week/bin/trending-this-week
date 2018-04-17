@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
 require './lib/trending_this_week'
-puts 'This is working '
-# TrendingThisWeek::CLI.new.call
+
+TrendingThisWeek::CLI.new.call
