@@ -22,9 +22,9 @@ spots_array = []
                     location = spot.children[3].text
 
                     if rank_change.include? 'Positive'
-                        rank_change = " + #{rank_change_value}"
+                        rank_change = "+ #{rank_change_value}"
                       elsif rank_change.include? 'Negative'
-                        rank_change = " - #{rank_change_value}"
+                        rank_change = "- #{rank_change_value}"
                       else
                         rank_change = '0'
                     end
@@ -34,6 +34,7 @@ spots_array = []
                     spots_array<<spot
 
           end
-          binding.pry
+            spots_array
   end
+
 end

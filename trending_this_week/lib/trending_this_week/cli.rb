@@ -1,5 +1,5 @@
 class TrendingThisWeek::CLI
-
+    attr_accessor :name, :location, :type, :rank, :rank_change
 
   def call
     list_spots
@@ -9,9 +9,9 @@ class TrendingThisWeek::CLI
 
   def list_spots
     puts 'These are the spots trending in NYC this week'
-    spot_array =  TrendingThisWeek::Spots.this_week
-         spot_array.each do |spot|
-            puts "#{spot.position}. #{spot.name} - #{spot.location}"
+    # binding.pry
+    TrendingThisWeek::Spots.this_week.map do |spot|
+            puts "#{spot.rank}. #{spot.name} - #{spot.type} - #{spot.location}"
          end
   end
 

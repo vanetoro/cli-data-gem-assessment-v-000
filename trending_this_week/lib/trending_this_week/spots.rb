@@ -1,29 +1,26 @@
 class TrendingThisWeek::Spots
-    attr_accessor :name, :location, :type, :position
+    attr_accessor :name, :location, :type, :rank, :rank_change
   @@all = []
 
 
 
   def self.all
-    @all
+    @@all
   end
 
   def self.this_week
-    TrendingThisWeek::Scraper.scraper_nyc
-    spot_1 =  self.new
-    spot_1.name = 	"Mikkeller Brewing NYC"
-    spot_1.location = 	"Flushing Meadows-Corona Park"
-    spot_1.type = 'Brewery'
-    spot_1.position = 1
+  TrendingThisWeek::Scraper.scraper_nyc.each do | spots|
+          spot =  self.new
+          spot.name = spots[:name]
+          spot.location = spots[:location]
+          spot.type = spots[:type]
+          spot.rank = spots[:rank]
+          spot.rank_change = spots[:rank_change]
 
-    spot_2 =  self.new
-    spot_2.name = 	"Urbanspace at 570 Lex"
-    spot_2.location = 	"Midtown East"
-    spot_2.type = 'Food Court'
-    spot_2.position = 2
-
-    [spot_1, spot_2]
-    # binding.pry
+          @@all << spot
+      end
+      # binding.pry
+      @@all
   end
 
 end
