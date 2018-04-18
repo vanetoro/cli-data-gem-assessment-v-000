@@ -8,8 +8,9 @@ class TrendingThisWeek::Spots
     @@all
   end
 
-  def self.this_week
-  TrendingThisWeek::Scraper.scraper_nyc.each do | spots|
+  def self.this_week(url)
+
+  TrendingThisWeek::Scraper.scraper(url).each do | spots|
           spot =  self.new
           spot.name = spots[:name]
           spot.location = spots[:location]

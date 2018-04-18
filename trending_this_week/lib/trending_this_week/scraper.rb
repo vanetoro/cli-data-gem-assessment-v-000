@@ -9,8 +9,8 @@ require 'open-uri'
 class TrendingThisWeek::Scraper
       attr_accessor :name, :location, :rank_change, :type, :rank
 
-    def self.scraper_nyc
-      html = open('https://foursquare.com/foursquare/list/trending-this-week-new-york-city')
+    def self.scraper(index_page)
+      html = open(index_page)
       trending = Nokogiri::HTML(html)
 spots_array = []
           trending.css('.hotThisWeekList tbody tr').each do |spot|
