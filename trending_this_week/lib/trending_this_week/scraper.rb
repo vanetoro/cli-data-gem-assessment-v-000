@@ -35,6 +35,8 @@ class TrendingThisWeek::Scraper
     html = open(spot_url)
     spot_page = Nokogiri::HTML(html)
     binding.pry
+    #address = spot_page.css('.adr').text
+    #rowkey = spot_page.css('.foodDrinkTitle')
   end
 
 end
