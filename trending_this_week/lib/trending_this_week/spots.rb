@@ -1,5 +1,5 @@
 class TrendingThisWeek::Spots
-    attr_accessor :name, :location, :type, :rank, :rank_change
+    attr_accessor :name, :location, :type, :rank, :rank_change, :url
   @@all = []
 
 
@@ -17,7 +17,7 @@ class TrendingThisWeek::Spots
           spot.type = spots[:type]
           spot.rank = spots[:rank]
           spot.rank_change = spots[:rank_change]
-
+          spot.url = spots[:spot_url]
           @@all << spot
       end
       # binding.pry
