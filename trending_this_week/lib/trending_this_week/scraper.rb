@@ -7,21 +7,20 @@ require 'open-uri'
 
 
 class TrendingThisWeek::Scraper
-  def self.scraper_nyc
-    html = open('https://foursquare.com/foursquare/list/trending-this-week-new-york-city')
+      attr_accessor :name, :location, :rank_change, :type, :rank
 
-    trending = Nokogiri::HTML(html)
+    def self.scraper_nyc
+      html = open('https://foursquare.com/foursquare/list/trending-this-week-new-york-city')
+      trending = Nokogiri::HTML(html)
 
-      binding.pry
-      loop_this = trending.css('.hotThisWeekList tbody tr')
-      # .each do | spot|
-      binding.pry
-      # rank = index + 1
-      url =  spot.attribute('href').value
-      name = spot.text
-      neighborhood =
-      binding.pry
-    # end
-    # binding.pry
+          trending.css('.hotThisWeekList tbody tr').each do |spot|
+                    name = spot.children[2].children[0].text
+                    rank =  spot.children[0].text.split('.')[0]
+                    rank_change = spot.children[1].children[0].values[0]
+                    type = spot.children[2].children[1].text
+                    location = spot.children[3].text
+                    binding.pry
+          end
+
   end
 end
