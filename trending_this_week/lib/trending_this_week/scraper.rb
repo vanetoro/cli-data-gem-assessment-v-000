@@ -12,15 +12,28 @@ class TrendingThisWeek::Scraper
     def self.scraper_nyc
       html = open('https://foursquare.com/foursquare/list/trending-this-week-new-york-city')
       trending = Nokogiri::HTML(html)
-
+spots_array = []
           trending.css('.hotThisWeekList tbody tr').each do |spot|
                     name = spot.children[2].children[0].text
                     rank =  spot.children[0].text.split('.')[0]
                     rank_change = spot.children[1].children[0].values[0]
+                    rank_change_value = spot.children[1].children[0].text
                     type = spot.children[2].children[1].text
                     location = spot.children[3].text
-                    binding.pry
-          end
 
+                    if rank_change.include? 'Positive'
+                        rank_change = " + #{rank_change_value}"
+                      elsif rank_change.include? 'Negative'
+                        rank_change = " - #{rank_change_value}"
+                      else
+                        rank_change = '0'
+                    end
+
+                    spot = {:name => name, :rank => rank, :rank_change => rank_change, :type => type, :location => location}
+
+                    spots_array<<spot
+
+          end
+          binding.pry
   end
 end
