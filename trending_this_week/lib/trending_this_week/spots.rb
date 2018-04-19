@@ -47,4 +47,5 @@ class TrendingThisWeek::Spots
     binding.pry
   end
 
+
 end

@@ -4,7 +4,7 @@ require 'open-uri'
 
 class TrendingThisWeek::Scraper
       attr_accessor :name, :location, :rank_change, :type, :rank, :spot_url, :address, :city, :phone_number,
-      :other_info, :all_top_places, :rating
+      :other_info, :all_top_places, :rating, :list_name, :list_url
 
     def self.scraper(index_page)
       html = open(index_page)
@@ -72,5 +72,20 @@ class TrendingThisWeek::Scraper
         end
       all_top_places
 end
+
+def self.list_page
+  html = open('https://foursquare.com/top-places/new-york-city/')
+  list = Nokogiri::HTML(html)
+  list_array = []
+        list.each do |list_names|
+        list_name = list.css('.listName').text
+        list_url = list.css('.listCard a').attribute('href').value
+        new_list =  { :list_name => list_name, :list_url=> list_url}
+        list_array << new_list
+        binding.pry
+      end
+      # binding.pry
+end
+
 
 end
