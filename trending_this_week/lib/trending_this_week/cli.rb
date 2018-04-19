@@ -70,39 +70,42 @@ end
   end
 
   def list_info(spot_instance, more_info)
-    # binding.pry
     more_info = more_info.strip
-
       case more_info
-      when '1'
-        puts "#{spot_instance.phone_number}"
-      when '2'
-        puts "#{spot_instance.address}"
-      when '3'
-        puts "#{spot_instance.city}"
-      when '4'
+        when '1'
+          puts "#{spot_instance.phone_number}"
+          more_info = gets
+        when '2'
+          puts "#{spot_instance.address}"
+          more_info = gets
+        when '3'
+          puts "#{spot_instance.city}"
+          more_info = gets
+        when '4'
+            feature(spot_instance)
+            more_info = gets
+        when 'all'
+          puts "Rank #{spot_instance.rank} - #{spot_instance.name} - #{spot_instance.type}
+          Address: #{spot_instance.address} - #{spot_instance.location} - #{spot_instance.city}
+          Phone: #{spot_instance.phone_number}".strip
           feature(spot_instance)
-      when 'all'
-        puts
-        "Rank #{spot_instance.rank} - #{spot_instance.name} - #{spot_instance.type}
-        Address: #{spot_instance.address} - #{spot_instance.location} - #{spot_instance.city}
-        Phone: #{spot_instance.phone_number}"
-        feature(spot_instance)
-      when 'exit'
+          more_info = gets
+        when 'exit'
+            other_info = 'exit'
             goodbye
-      else
-        gets = more_info
-      end
+        else
+          more_info = gets
 
+      end
   end
 
   def feature(instance)
     if instance.features.length > 0
       puts "Additional Information:"
-    instance.features.each do | feature|
-      puts "#{feature}"
+      instance.features.each do | feature|
+        puts "#{feature}"
+      end
     end
-  end
   end
 
 
