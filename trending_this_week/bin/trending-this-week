@@ -3,5 +3,5 @@
 
 require './lib/trending_this_week'
 
-TrendingThisWeek::Scraper.scrape_top_places
+TrendingThisWeek::Scraper.list_page
 # TrendingThisWeek::CLI.new.call

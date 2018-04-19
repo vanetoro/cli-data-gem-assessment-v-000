@@ -40,7 +40,7 @@ class TrendingThisWeek::Scraper
     address = address_array[0]
     city = address_array[1]
     phone_number = spot_page.css('.tel').text
-    # addt'l info
+
         i = 0
         other_info = []
         while i < spot_page.css('.venueRowKey').length
@@ -58,18 +58,19 @@ class TrendingThisWeek::Scraper
   all_top_places = []
     title =  explore.css('h1').text
       explore.css('.venueInfo').each do |top|
-          name =  top.children[0].children[0].text
+          rank_and_name = top.children[0].children[0].text.split('.')
+          name = rank_and_name[0]
+          rank = rank_and_name[1]
           rating = top.children[0].children[1].text
           address = top.children[0].children[2].text
           type_location = top.children[0].children[3].text.split('·')
           type = type_location[0].strip
           location = type_location[1].strip
-          all_top_places << top_place = [:name => name, :rating =>rating, :address => address, :type => type , :location => location]
+          spot_url = "https://foursquare.com#{explore.css('.venueInfo a').attribute('href').value}"
+          all_top_places << top_place = {:name => name,:rank => rank, :rating =>rating, :address => address, :type => type , :location => location, :spot_url => spot_url}
 
         end
-
       all_top_places
-      binding.pry
 end
 
 end
