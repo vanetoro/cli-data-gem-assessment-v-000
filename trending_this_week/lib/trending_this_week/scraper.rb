@@ -3,7 +3,8 @@ require 'open-uri'
 
 
 class TrendingThisWeek::Scraper
-      attr_accessor :name, :location, :rank_change, :type, :rank, :spot_url, :address, :city, :phone_number, :other_info
+      attr_accessor :name, :location, :rank_change, :type, :rank, :spot_url, :address, :city, :phone_number,
+      :other_info, :all_top_places, :rating
 
     def self.scraper(index_page)
       html = open(index_page)
@@ -54,11 +55,21 @@ class TrendingThisWeek::Scraper
   def self.scrape_top_places
   html = open('https://foursquare.com/top-places/new-york-city/best-places-burgers')
   explore = Nokogiri::HTML(html)
+  all_top_places = []
+    title =  explore.css('h1').text
+      explore.css('.venueInfo').each do |top|
+          name =  top.children[0].children[0].text
+          rating = top.children[0].children[1].text
+          address = top.children[0].children[2].text
+          type_location = top.children[0].children[3].text.split('·')
+          type = type_location[0].strip
+          location = type_location[1].strip
+          all_top_places << top_place = [:name => name, :rating =>rating, :address => address, :type => type , :location => location]
 
-    binding.pry
+        end
 
-    #title =  explore.css('h1').text
-    #rank =   explore.css('.venueName a').children.children
+      all_top_places
+      binding.pry
 end
 
 end
