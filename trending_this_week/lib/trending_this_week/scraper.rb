@@ -3,7 +3,7 @@ require 'open-uri'
 
 
 class TrendingThisWeek::Scraper
-      attr_accessor :name, :location, :rank_change, :type, :rank, :spot_url
+      attr_accessor :name, :location, :rank_change, :type, :rank, :spot_url, :address, :city, :phone_number, :other_info
 
     def self.scraper(index_page)
       html = open(index_page)
@@ -34,9 +34,21 @@ class TrendingThisWeek::Scraper
   def self.scraper_spot_page(spot_url)
     html = open(spot_url)
     spot_page = Nokogiri::HTML(html)
-    binding.pry
-    #address = spot_page.css('.adr').text
-    #rowkey = spot_page.css('.foodDrinkTitle')
+
+    address_array = spot_page.css('.adr').text.split(/(?<!\s|[A-Z])(?=[A-Z])|,/)
+    address = address_array[0]
+    city = address_array[1]
+    phone_number = spot_page.css('.tel').text
+    # addt'l info
+        i = 0
+        other_info = []
+        while i < spot_page.css('.venueRowKey').length
+          key = spot_page.css('.venueRowKey')
+          value = spot_page.css('.venueRowValue')
+          other_info << "#{key[i].text} - #{value[i].text}"
+          i+=1
+        end
+        more_info = [address, city, phone_number, other_info]
   end
 
 end

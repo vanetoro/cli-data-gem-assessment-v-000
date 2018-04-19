@@ -1,8 +1,7 @@
 class TrendingThisWeek::CLI
-    attr_accessor :name, :location, :type, :rank, :rank_change, :url
+    attr_accessor :name, :location, :type, :rank, :rank_change, :url, :address, :city, :phone_number, :features
 
   def call
-    # list_spots(cities)
     more_info
   end
 
@@ -48,11 +47,39 @@ end
   def more_info
     instance_array = list_spots(cities)
     puts 'Enter a number matching a Trending Spot for more information, type list to see the list again or type exit'
+
     user_input = STDIN.gets.to_i - 1
-    url = instance_array[user_input].url
-    TrendingThisWeek::Scraper.scraper_spot_page(url)
+    user_pick = instance_array[user_input]
+    TrendingThisWeek::Spots.spot_more_info(user_pick)
+    # binding.pry
+    puts "What additional information would you like to know?
+    1. Phone number
+    2. Address
+    3. City
+    4. Features
+    or all to list all the info.
+    "
+    user_choice = gets
+    list_info(user_pick, user_choice)
+    binding.pry
   end
 
-
-
+  def list_info(spot_instance, more_info)
+    binding.pry
+      case more_info
+      when '1'
+        puts "#{spot_instance.phone_number}"
+      when '2'
+        puts "#{spot_instance.address}"
+      when '3'
+        puts "#{spot_instance.city}"
+      when '4'
+        puts "#{spot_instance.features}"
+      when 'all'
+        puts "#{spot_instance.rank} - #{spot_instance.name} - #{spot_instance.type}
+              #{spot_instance.address} - #{spot_instance.location} - #{spot_instance.city}
+              #{spot_instance.phone_number}
+              #{spot_instance.features} "
+      end
+  end
 end
