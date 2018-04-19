@@ -51,4 +51,14 @@ class TrendingThisWeek::Scraper
         more_info = [address, city, phone_number, other_info]
   end
 
+  def self.scrape_top_places
+  html = open('https://foursquare.com/top-places/new-york-city/best-places-burgers')
+  explore = Nokogiri::HTML(html)
+
+    binding.pry
+
+    #title =  explore.css('h1').text
+    #rank =   explore.css('.venueName a').children.children
+end
+
 end
