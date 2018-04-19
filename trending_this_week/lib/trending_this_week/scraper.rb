@@ -51,4 +51,6 @@ class TrendingThisWeek::Scraper
         more_info = [address, city, phone_number, other_info]
   end
 
+
+
 end
