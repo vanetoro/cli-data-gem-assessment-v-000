@@ -35,6 +35,11 @@ end
       when '5'
         city_name = 'Austin'
         url = "https://foursquare.com/foursquare/list/trending-this-week-austin"
+      when 'exit'
+        goodbye
+      else
+        puts "I didn't get that, please try again!"
+
     end
     # binding.pry
     puts "Here are the top spots in #{city_name.upcase}"
@@ -61,11 +66,13 @@ end
     "
     user_choice = gets
     list_info(user_pick, user_choice)
-    binding.pry
+    # binding.pry
   end
 
   def list_info(spot_instance, more_info)
-    binding.pry
+    # binding.pry
+    more_info = more_info.strip
+
       case more_info
       when '1'
         puts "#{spot_instance.phone_number}"
@@ -74,12 +81,32 @@ end
       when '3'
         puts "#{spot_instance.city}"
       when '4'
-        puts "#{spot_instance.features}"
+          feature(spot_instance)
       when 'all'
-        puts "#{spot_instance.rank} - #{spot_instance.name} - #{spot_instance.type}
-              #{spot_instance.address} - #{spot_instance.location} - #{spot_instance.city}
-              #{spot_instance.phone_number}
-              #{spot_instance.features} "
+        puts
+        "Rank #{spot_instance.rank} - #{spot_instance.name} - #{spot_instance.type}
+        Address: #{spot_instance.address} - #{spot_instance.location} - #{spot_instance.city}
+        Phone: #{spot_instance.phone_number}"
+        feature(spot_instance)
+      when 'exit'
+            goodbye
+      else
+        gets = more_info
       end
+
+  end
+
+  def feature(instance)
+    if instance.features.length > 0
+      puts "Additional Information:"
+    instance.features.each do | feature|
+      puts "#{feature}"
+    end
+  end
+  end
+
+
+  def goodbye
+    puts 'See you next time!'
   end
 end
