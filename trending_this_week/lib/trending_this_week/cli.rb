@@ -4,8 +4,8 @@ class TrendingThisWeek::CLI
 
   def call
   puts  'Welcome to trending spots where you can see the top trending spots from the tops cities in the US'
-    # cities
-    top_places_cities
+    cities
+    # top_places_cities
   end
 
   def top_places_cities
