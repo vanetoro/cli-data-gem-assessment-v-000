@@ -17,7 +17,7 @@ class TrendingThisWeek::CLI
     4. San Francisco
     5. Austin"
     picked_city = STDIN.gets.strip
-    city_name = nil
+    @city_name = nil
     case picked_city
       when '1'
         @city_name = 'NYC'
@@ -96,7 +96,7 @@ end
           Address: #{spot_instance.address} - #{spot_instance.location} - #{spot_instance.city}
           Phone: #{spot_instance.phone_number}
           HEREDOC
-          "#{feature(spot_instance)}/n/n"
+          "#{feature(spot_instance)}\n\n"
           city_or_spots
         when 'exit'
           goodbye
@@ -104,8 +104,6 @@ end
           cities
         when 'list'
           list_spots
-        when 'spots'
-        more_info(@spots_array)
         else
           puts "I didn't get that please try again"
           spot_info = gets.strip
@@ -116,7 +114,7 @@ end
   def check_if_info(instance, info)
     if  info.empty?
       puts "Seems we don't have that information. Please try again!/n/n"
-      additional_info(instance)
+     additional_info(instance)
     else
       puts "#{info}"
       additional_info(instance)
@@ -130,8 +128,10 @@ end
           list_spots
       elsif user_input == 'cities'
           cities
-      else
+      elsif user_input == 'exit'
         goodbye
+      else
+        puts "I didn't get that please try again."
       end
   end
 
@@ -167,15 +167,5 @@ end
     list_info(instance,user_choice)
   end
 
-  def print_list(url)
-     place_array = TrendingThisWeek::List.list_to_hash(url)
-      place_array.each do |each_list|
-        puts "#{each_list.list_name}"
-      end
-      place = gets.to_i - 1
-      TrendingThisWeek::Spots.top_places(place_array[place].list_url).each do |listed_place|
-            puts "#{listed_place.name}"
-      end
-  end
 
 end

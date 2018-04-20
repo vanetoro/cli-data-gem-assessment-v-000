@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
-
 require './lib/trending_this_week'
 
-
 TrendingThisWeek::CLI.new.call
-# TrendingThisWeek::Scraper.scrape_list_page

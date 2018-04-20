@@ -21,7 +21,6 @@ class TrendingThisWeek::Spots
           @@all << spot
           city_array << spot
       end
-      # binding.pry
       city_array
   end
 
