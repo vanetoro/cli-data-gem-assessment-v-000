@@ -31,7 +31,6 @@ class TrendingThisWeek::Spots
       spot_instance.city = more_info_array[1]
       spot_instance.phone_number = more_info_array[2]
       spot_instance.features = more_info_array[3]
-      # binding.pry
       end
 
 end

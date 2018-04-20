@@ -60,7 +60,7 @@ end
     elsif user_input == 'exit'
       goodbye
     else
-      user_input = user_input.to_i
+      user_input = user_input.to_i - 1
       user_pick = spots_array[user_input]
       TrendingThisWeek::Spots.spot_more_info(user_pick)
       additional_info(user_pick)
@@ -81,31 +81,40 @@ end
           additional_info(spot_instance)
         when '4'
             feature(spot_instance)
-            additional_info(spot_instance)
+
         when 'all'
           puts <<~HEREDOC
           Rank #{spot_instance.rank} - #{spot_instance.name} - #{spot_instance.type}
           Address: #{spot_instance.address} - #{spot_instance.location} - #{spot_instance.city}
           Phone: #{spot_instance.phone_number}
           HEREDOC
-          feature(spot_instance)
+          "#{feature(spot_instance)}/n/n"
+          puts 'Would you like get a list of the cities again?'
+          spot_info = gets.strip.downcase
+            if spot_info  == 'y'
+              list_info(spot_instance, 'city')
+            else
+              goodbye
+            end 
         when 'exit'
             goodbye
         when 'city'
         cities
         else
           spot_info = gets.strip
+          list_info(spot_instance, spot_info)
         end
   end
 
   def feature(instance)
+    # binding.pry
     if instance.features.length > 0
       puts "Additional Information:"
 
       instance.features.each do | feature|
-        puts
-        "#{feature}"
+        puts "#{feature}"
       end
+
     end
   end
 
