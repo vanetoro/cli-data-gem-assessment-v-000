@@ -42,8 +42,12 @@ end
 
   def list_spots(url, city_name)
         puts "Here are the top spots in #{city_name}"
-  spots_array =   TrendingThisWeek::Spots.this_week(url).each do |spot|
+      spots_array = TrendingThisWeek::Spots.this_week(url).each do |spot|
+        if !spot.location.empty?
               puts "#{spot.rank}. #{spot.name} - #{spot.type} - #{spot.location}"
+            else
+              puts "#{spot.rank}. #{spot.name} - #{spot.type}"
+          end
       end
   more_info(spots_array)
 end
@@ -79,9 +83,11 @@ end
             feature(spot_instance)
             additional_info(spot_instance)
         when 'all'
-          puts "Rank #{spot_instance.rank} - #{spot_instance.name} - #{spot_instance.type}
+          puts <<~HEREDOC
+          Rank #{spot_instance.rank} - #{spot_instance.name} - #{spot_instance.type}
           Address: #{spot_instance.address} - #{spot_instance.location} - #{spot_instance.city}
-          Phone: #{spot_instance.phone_number}".strip
+          Phone: #{spot_instance.phone_number}
+          HEREDOC
           feature(spot_instance)
         when 'exit'
             goodbye
@@ -95,8 +101,10 @@ end
   def feature(instance)
     if instance.features.length > 0
       puts "Additional Information:"
+
       instance.features.each do | feature|
-        puts "#{feature}"
+        puts
+        "#{feature}"
       end
     end
   end
