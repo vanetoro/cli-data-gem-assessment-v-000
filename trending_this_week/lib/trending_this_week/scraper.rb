@@ -3,7 +3,8 @@ require 'open-uri'
 
 
 class TrendingThisWeek::Scraper
-      attr_accessor :name, :location, :rank_change, :type, :rank, :spot_url, :address, :city, :phone_number, :other_info
+      attr_accessor :name, :location, :rank_change, :type, :rank, :spot_url, :address, :city, :phone_number,
+      :other_info, :all_top_places, :rating, :list_name, :list_url
 
     def self.scraper(index_page)
       html = open(index_page)
@@ -36,10 +37,10 @@ class TrendingThisWeek::Scraper
     spot_page = Nokogiri::HTML(html)
 
     address_array = spot_page.css('.adr').text.split(/(?<!\s|[A-Z])(?=[A-Z])|,/)
-    address = address_array[0]
-    city = address_array[1]
+    address = address_array[0].delete('()')
+    city = address_array[1].delete('()')
     phone_number = spot_page.css('.tel').text
-    # addt'l info
+
         i = 0
         other_info = []
         while i < spot_page.css('.venueRowKey').length
@@ -51,6 +52,39 @@ class TrendingThisWeek::Scraper
         more_info = [address, city, phone_number, other_info]
   end
 
+  def self.scrape_top_places(url)
+  html = open(url)
+  explore = Nokogiri::HTML(html)
+  all_top_places = []
+    title =  explore.css('h1').text
+      explore.css('.venueInfo').each do |top|
+          rank_and_name = top.children[0].children[0].text.split('.')
+          name = rank_and_name[1]
+          rank = rank_and_name[0]
+          rating = top.children[0].children[1].text
+          address = top.children[0].children[2].text
+          type_location = top.children[0].children[3].text.split('·')
+          type = type_location[0].strip
+          location = type_location[1].strip
+          spot_url = "https://foursquare.com#{explore.css('.venueInfo a').attribute('href').value}"
+          all_top_places << top_place = {:name => name,:rank => rank, :rating =>rating, :address => address, :type => type , :location => location, :spot_url => spot_url}
+        end
+      all_top_places
+end
 
+def self.scrape_list_page(url)
+  html = open(url, "User-Agent"=>"Zombies from Space" )
+  list = Nokogiri::HTML(html)
+  list_array = []
+          i = 0
+          while i < 5
+            list_name = list.css('.listCard').children[i].children.children[0].attribute('alt').value
+            list_url = "https://foursquare.com#{list.css('.listCard')[i].children.attribute('href').value}"
+            new_list =  { :list_name => list_name, :list_url=> list_url}
+            list_array << new_list
+            i+=1
+          end
+        list_array
+end
 
 end

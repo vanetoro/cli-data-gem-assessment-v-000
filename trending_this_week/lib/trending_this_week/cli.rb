@@ -1,12 +1,39 @@
 class TrendingThisWeek::CLI
-    attr_accessor :name, :location, :type, :rank, :rank_change, :url, :address, :city, :phone_number, :features
+    attr_accessor :name, :location, :type, :rank, :url, :address, :city, :phone_number, :features, :list_name, :city_name
+
 
   def call
   puts  'Welcome to trending spots where you can see the top trending spots from the tops cities in the US'
+    @spots_array = nil
     cities
   end
 
+  def top_places_cities
+    puts "What city would you like to check out today?
+    1. NYC
+    2. Los Angeles
+    3. Chicago
+    4. San Francisco
+    5. Miami"
+
+    html = "https://foursquare.com/top-places/"
+    city = gets.strip
+     case city
+       when '1'
+        print_list("#{html}new-york-city")
+       when '2'
+         print_list("#{html}los-angeles")
+       when '3'
+         print_list("#{html}chicago")
+       when '4'
+         print_list("#{html}san-francisco")
+       when '5'
+         print_list("#{html}miami")
+     end
+  end
+
   def cities
+    @spots_array = nil
     puts " Please pick a city
     1. NYC
     2. Los Angeles
@@ -17,71 +44,74 @@ class TrendingThisWeek::CLI
     city_name = nil
     case picked_city
       when '1'
-        city_name = 'NYC'
-        url = "https://foursquare.com/foursquare/list/trending-this-week-new-york-city"
+        @city_name = 'NYC'
+        @url = "https://foursquare.com/foursquare/list/trending-this-week-new-york-city"
       when '2'
-        city_name = 'Los Angeles'
-        url = "https://foursquare.com/foursquare/list/trending-this-week-los-angeles"
+        @city_name = 'Los Angeles'
+        @url = "https://foursquare.com/foursquare/list/trending-this-week-los-angeles"
       when '3'
-        city_name = 'Chicago'
-        url = "https://foursquare.com/foursquare/list/trending-this-week-chicago"
+        @city_name = 'Chicago'
+        @url = "https://foursquare.com/foursquare/list/trending-this-week-chicago"
       when '4'
-        city_name = 'San Francisco'
-        url = "https://foursquare.com/foursquare/list/trending-this-week-san-francisco"
+        @city_name = 'San Francisco'
+        @url = "https://foursquare.com/foursquare/list/trending-this-week-san-francisco"
       when '5'
-        city_name = 'Austin'
-        url = "https://foursquare.com/foursquare/list/trending-this-week-austin"
+        @city_name = 'Austin'
+        @url = "https://foursquare.com/foursquare/list/trending-this-week-austin"
       when 'exit'
         goodbye
       else
         puts "I didn't get that, please try again!"
         cities
       end
-    list_spots(url,city_name)
+    list_spots
 end
 
-  def list_spots(url, city_name)
-        puts "Here are the top spots in #{city_name}"
-      spots_array = TrendingThisWeek::Spots.this_week(url).each do |spot|
+  def list_spots
+        puts "Here are the top spots in #{@city_name}"
+        @spots_array = TrendingThisWeek::Spots.this_week(@url).each do |spot|
         if !spot.location.empty?
               puts "#{spot.rank}. #{spot.name} - #{spot.type} - #{spot.location}"
             else
               puts "#{spot.rank}. #{spot.name} - #{spot.type}"
           end
       end
-  more_info(spots_array)
+
+  more_info
 end
 
-  def more_info(spots_array)
-    puts 'Enter a number matching a Trending Spot for more information, type list to see the available cities again or type exit'
-    user_input = STDIN.gets
-    if user_input == 'list'
-      cities
-    elsif user_input == 'exit'
-      goodbye
-    else
-      user_input = user_input.to_i - 1
-      user_pick = spots_array[user_input]
-      TrendingThisWeek::Spots.spot_more_info(user_pick)
-      additional_info(user_pick)
-    end
+
+  def more_info
+    puts "Enter a number matching a Trending Spot for more information, type 'city' to see the available cities or type exit"
+    user_input = STDIN.gets.strip
+        if user_input == 'city'
+          cities
+        elsif user_input == 'exit'
+          goodbye
+        elsif user_input.to_i > 0 && user_input.to_i <= @spots_array.length
+          user_pick = @spots_array[user_input.to_i-1]
+          TrendingThisWeek::Spots.spot_more_info(user_pick)
+          additional_info(user_pick)
+        else
+          puts "I didn't get that please try again :)"
+          more_info
+        end
   end
+
 
   def list_info(spot_instance, spot_info)
     spot_info = spot_info.strip
       case spot_info
         when '1'
-          puts "#{spot_instance.phone_number}"
-          additional_info(spot_instance)
+          check_if_info(spot_instance,spot_instance.phone_number)
         when '2'
-          puts "#{spot_instance.address}"
-          additional_info(spot_instance)
-        when '3'
-          puts "#{spot_instance.city}"
-          additional_info(spot_instance)
-        when '4'
-            feature(spot_instance)
+          check_if_info(spot_instance, spot_instance.address)
 
+       when '3'
+         check_if_info(spot_instance, spot_instance.city)
+      when '4'
+            feature(spot_instance)
+            city_or_spots
         when 'all'
           puts <<~HEREDOC
           Rank #{spot_instance.rank} - #{spot_instance.name} - #{spot_instance.type}
@@ -89,34 +119,55 @@ end
           Phone: #{spot_instance.phone_number}
           HEREDOC
           "#{feature(spot_instance)}/n/n"
-          puts 'Would you like get a list of the cities again?'
-          spot_info = gets.strip.downcase
-            if spot_info  == 'y'
-              list_info(spot_instance, 'city')
-            else
-              goodbye
-            end 
+          city_or_spots
         when 'exit'
-            goodbye
+          goodbye
         when 'city'
-        cities
+          cities
+        when 'list'
+          list_spots
+        when 'spots'
+        more_info(@spots_array)
         else
+          puts "I didn't get that please try again"
           spot_info = gets.strip
-          list_info(spot_instance, spot_info)
+
         end
   end
 
+  def check_if_info(instance, info)
+    if  info.empty?
+      puts "Seems we don't have that information. Please try again!"
+      additional_info(instance)
+    else
+      puts "#{info}"
+  end
+
+  def city_or_spots
+    puts "Would you like to see a list of the 'spots', 'cities' or 'exit'?"
+    user_input = gets.strip.downcase
+      if user_input  == 'spots'
+          list_spots
+      elsif user_input == 'cities'
+          cities
+      else
+        goodbye
+      end
+  end
+
+
   def feature(instance)
-    # binding.pry
     if instance.features.length > 0
       puts "Additional Information:"
-
-      instance.features.each do | feature|
-        puts "#{feature}"
-      end
-
+        instance.features.each do | feature|
+          puts "#{feature}"
+        end
+      else
+        puts "Seems we don't have that any additional information"
     end
   end
+
+end
 
 
   def goodbye
@@ -129,9 +180,22 @@ end
     2. Address
     3. City
     4. Features
+
     Type 'all' to list all the info or 'city' to see a list of the available cites.
     Type 'exit' at any time to leave"
     user_choice = gets.strip
     list_info(instance,user_choice)
   end
+
+  def print_list(url)
+     place_array = TrendingThisWeek::List.list_to_hash(url)
+      place_array.each do |each_list|
+        puts "#{each_list.list_name}"
+      end
+      place = gets.to_i - 1
+      TrendingThisWeek::Spots.top_places(place_array[place].list_url).each do |listed_place|
+            puts "#{listed_place.name}"
+      end
+  end
+
 end
