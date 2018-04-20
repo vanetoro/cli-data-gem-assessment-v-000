@@ -8,30 +8,6 @@ class TrendingThisWeek::CLI
     cities
   end
 
-  def top_places_cities
-    puts "What city would you like to check out today?
-    1. NYC
-    2. Los Angeles
-    3. Chicago
-    4. San Francisco
-    5. Miami"
-
-    html = "https://foursquare.com/top-places/"
-    city = gets.strip
-     case city
-       when '1'
-        print_list("#{html}new-york-city")
-       when '2'
-         print_list("#{html}los-angeles")
-       when '3'
-         print_list("#{html}chicago")
-       when '4'
-         print_list("#{html}san-francisco")
-       when '5'
-         print_list("#{html}miami")
-     end
-  end
-
   def cities
     @spots_array = nil
     puts " Please pick a city
@@ -46,26 +22,29 @@ class TrendingThisWeek::CLI
       when '1'
         @city_name = 'NYC'
         @url = "https://foursquare.com/foursquare/list/trending-this-week-new-york-city"
+        list_spots
       when '2'
         @city_name = 'Los Angeles'
         @url = "https://foursquare.com/foursquare/list/trending-this-week-los-angeles"
+        list_spots
       when '3'
         @city_name = 'Chicago'
         @url = "https://foursquare.com/foursquare/list/trending-this-week-chicago"
+        list_spots
       when '4'
         @city_name = 'San Francisco'
         @url = "https://foursquare.com/foursquare/list/trending-this-week-san-francisco"
       when '5'
         @city_name = 'Austin'
         @url = "https://foursquare.com/foursquare/list/trending-this-week-austin"
+        list_spots
       when 'exit'
         goodbye
       else
         puts "I didn't get that, please try again!"
         cities
       end
-    list_spots
-end
+    end
 
   def list_spots
         puts "Here are the top spots in #{@city_name}"
@@ -106,10 +85,9 @@ end
           check_if_info(spot_instance,spot_instance.phone_number)
         when '2'
           check_if_info(spot_instance, spot_instance.address)
-
-       when '3'
+        when '3'
          check_if_info(spot_instance, spot_instance.city)
-      when '4'
+        when '4'
             feature(spot_instance)
             city_or_spots
         when 'all'
@@ -137,11 +115,13 @@ end
 
   def check_if_info(instance, info)
     if  info.empty?
-      puts "Seems we don't have that information. Please try again!"
+      puts "Seems we don't have that information. Please try again!/n/n"
       additional_info(instance)
     else
       puts "#{info}"
+      additional_info(instance)
   end
+end
 
   def city_or_spots
     puts "Would you like to see a list of the 'spots', 'cities' or 'exit'?"
@@ -167,7 +147,7 @@ end
     end
   end
 
-end
+
 
 
   def goodbye
