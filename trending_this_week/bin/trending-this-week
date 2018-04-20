@@ -3,5 +3,6 @@
 
 require './lib/trending_this_week'
 
-TrendingThisWeek::Scraper.list_page
-# TrendingThisWeek::CLI.new.call
+
+TrendingThisWeek::CLI.new.call
+# TrendingThisWeek::Scraper.scrape_list_page

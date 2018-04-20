@@ -52,15 +52,15 @@ class TrendingThisWeek::Scraper
         more_info = [address, city, phone_number, other_info]
   end
 
-  def self.scrape_top_places
-  html = open('https://foursquare.com/top-places/new-york-city/best-places-burgers')
+  def self.scrape_top_places(url)
+  html = open(url)
   explore = Nokogiri::HTML(html)
   all_top_places = []
     title =  explore.css('h1').text
       explore.css('.venueInfo').each do |top|
           rank_and_name = top.children[0].children[0].text.split('.')
-          name = rank_and_name[0]
-          rank = rank_and_name[1]
+          name = rank_and_name[1]
+          rank = rank_and_name[0]
           rating = top.children[0].children[1].text
           address = top.children[0].children[2].text
           type_location = top.children[0].children[3].text.split('·')
@@ -73,18 +73,21 @@ class TrendingThisWeek::Scraper
       all_top_places
 end
 
-def self.list_page
-  html = open('https://foursquare.com/top-places/new-york-city/')
+def self.scrape_list_page(url)
+  html = open(url, "User-Agent"=>"Zombies from Space" )
   list = Nokogiri::HTML(html)
   list_array = []
-        list.each do |list_names|
-        list_name = list.css('.listName').text
-        list_url = list.css('.listCard a').attribute('href').value
-        new_list =  { :list_name => list_name, :list_url=> list_url}
-        list_array << new_list
-        binding.pry
-      end
-      # binding.pry
+          i = 0
+          while i < 5
+            list_name = list.css('.listCard').children[i].children.children[0].attribute('alt').value
+            # binding.pry
+            list_url = "https://foursquare.com#{list.css('.listCard')[i].children.attribute('href').value}"
+
+            new_list =  { :list_name => list_name, :list_url=> list_url}
+            list_array << new_list
+            i+=1
+          end
+        list_array
 end
 
 

@@ -9,7 +9,6 @@ class TrendingThisWeek::Spots
   end
 
   def self.this_week(url)
-
   TrendingThisWeek::Scraper.scraper(url).each do | spots|
           spot =  self.new
           spot.name = spots[:name]
@@ -33,8 +32,10 @@ class TrendingThisWeek::Spots
       spot_instance.features = more_info_array[3]
       # binding.pry
       end
-  def self.top_places
-    TrendingThisWeek::Scraper.scrape_top_places.each do |spots|
+  def self.top_places(url)
+    list_array = []
+    list_url = url
+    TrendingThisWeek::Scraper.scrape_top_places(list_url).each do |spots|
       spot =  self.new
       spot.name = spots[:name]
       spot.location = spots[:location]
@@ -42,9 +43,9 @@ class TrendingThisWeek::Spots
       spot.rank = spots[:rank]
       spot.rank_change = spots[:rank_change]
       spot.url = spots[:spot_url]
-      @@all << spot
+      list_array << spot
     end
-    binding.pry
+    list_array
   end
 
 
