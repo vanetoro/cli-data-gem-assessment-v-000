@@ -1,5 +1,5 @@
 class TrendingThisWeek::CLI
-    attr_accessor :name, :location, :type, :rank, :url, :address, :city, :phone_number, :features, :list_name, :city_name
+    # attr_accessor :name, :location
 
 
   def call
