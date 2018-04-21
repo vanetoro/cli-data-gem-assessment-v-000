@@ -1,6 +1,6 @@
 class TrendingThisWeek::Spots
     attr_accessor :name, :location, :type, :rank, :rank_change, :url, :address, :city, :phone_number, :features
-  @@all = []
+
 
 
 
@@ -9,7 +9,8 @@ class TrendingThisWeek::Spots
   end
 
   def self.this_week(url)
-    city_array = []
+    @@all = []
+    # city_array = []
   TrendingThisWeek::Scraper.scraper(url).each do | spots|
           spot =  self.new
           spot.name = spots[:name]
@@ -19,9 +20,11 @@ class TrendingThisWeek::Spots
           spot.rank_change = spots[:rank_change]
           spot.url = spots[:spot_url]
           @@all << spot
-          city_array << spot
+          # city_array << spot
       end
-      city_array
+      # city_array
+      # binding.pry
+      @@all
   end
 
   def self.spot_more_info(spot_instance)
