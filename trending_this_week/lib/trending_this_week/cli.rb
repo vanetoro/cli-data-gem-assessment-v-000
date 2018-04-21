@@ -1,6 +1,4 @@
 class TrendingThisWeek::CLI
-    # attr_accessor :name, :location
-
 
   def call
   puts  'Welcome to trending spots where you can see the top trending spots from the tops cities in the US'
