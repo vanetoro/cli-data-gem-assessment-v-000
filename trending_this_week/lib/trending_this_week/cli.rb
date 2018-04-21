@@ -1,10 +1,7 @@
 class TrendingThisWeek::CLI
-    attr_accessor :name, :location, :type, :rank, :url, :address, :city, :phone_number, :features, :list_name, :city_name
-
 
   def call
   puts  'Welcome to trending spots where you can see the top trending spots from the tops cities in the US'
-    @spots_array = nil
     cities
   end
 
@@ -22,42 +19,44 @@ class TrendingThisWeek::CLI
       when '1'
         @city_name = 'NYC'
         @url = "https://foursquare.com/foursquare/list/trending-this-week-new-york-city"
-        list_spots
       when '2'
         @city_name = 'Los Angeles'
         @url = "https://foursquare.com/foursquare/list/trending-this-week-los-angeles"
-        list_spots
       when '3'
         @city_name = 'Chicago'
         @url = "https://foursquare.com/foursquare/list/trending-this-week-chicago"
-        list_spots
       when '4'
         @city_name = 'San Francisco'
         @url = "https://foursquare.com/foursquare/list/trending-this-week-san-francisco"
       when '5'
         @city_name = 'Austin'
         @url = "https://foursquare.com/foursquare/list/trending-this-week-austin"
-        list_spots
       when 'exit'
         goodbye
       else
         puts "I didn't get that, please try again!"
         cities
       end
+      get_spots
     end
 
   def list_spots
-        puts "Here are the top spots in #{@city_name}"
-        @spots_array = TrendingThisWeek::Spots.this_week(@url).each do |spot|
-        if !spot.location.empty?
-              puts "#{spot.rank}. #{spot.name} - #{spot.type} - #{spot.location}"
-            else
-              puts "#{spot.rank}. #{spot.name} - #{spot.type}"
-          end
+      @spots_array = TrendingThisWeek::Spots.all.each do |spot|
+      if !spot.location.empty?
+            puts "#{spot.rank}. #{spot.name} - #{spot.type} - #{spot.location}"
+          else
+            puts "#{spot.rank}. #{spot.name} - #{spot.type}"
+        end
       end
+    more_info
+  end
 
-  more_info
-end
+  def get_spots
+      puts "Here are the top spots in #{@city_name}"
+       TrendingThisWeek::Spots.this_week(@url).each do |spot|
+       end
+       list_spots
+  end
 
 
   def more_info
@@ -89,7 +88,7 @@ end
          check_if_info(spot_instance, spot_instance.city)
         when '4'
             feature(spot_instance)
-            city_or_spots
+            additional_info(spot_instance)
         when 'all'
           puts <<~HEREDOC
           Rank #{spot_instance.rank} - #{spot_instance.name} - #{spot_instance.type}
@@ -113,7 +112,7 @@ end
 
   def check_if_info(instance, info)
     if  info.empty?
-      puts "Seems we don't have that information. Please try again!/n/n"
+      puts "Seems we don't have that information. Please try again!\n\n"
      additional_info(instance)
     else
       puts "#{info}"
@@ -147,9 +146,6 @@ end
     end
   end
 
-
-
-
   def goodbye
     puts 'See you next time!'
   end
@@ -166,6 +162,5 @@ end
     user_choice = gets.strip
     list_info(instance,user_choice)
   end
-
 
 end
