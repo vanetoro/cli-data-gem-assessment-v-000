@@ -1,5 +1,5 @@
 class TrendingThisWeek::Spots
-    # attr_accessor :name, :location, :type, :rank, :rank_change, :url, :address, :city, :phone_number, :features
+    attr_accessor :name, :location, :type, :rank, :rank_change,  :url, #:address, :city, :phone_number, :features
 
 
 
