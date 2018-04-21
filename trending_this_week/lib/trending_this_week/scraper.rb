@@ -26,8 +26,8 @@ class TrendingThisWeek::Scraper
                         rank_change = '0'
                       end
 
-          spot = {:name => name, :rank => rank, :rank_change => rank_change, :type => type, :location => location, :spot_url => spot_url}
-          spots_array<<spot
+        spot = {:name => name, :rank => rank, :rank_change => rank_change, :type => type, :location => location, :spot_url => spot_url}
+        spots_array<<spot
         end
             spots_array
   end
@@ -52,25 +52,7 @@ class TrendingThisWeek::Scraper
         more_info = [address, city, phone_number, other_info]
   end
 
-  def self.scrape_top_places(url)
-  html = open(url)
-  explore = Nokogiri::HTML(html)
-  all_top_places = []
-    title =  explore.css('h1').text
-      explore.css('.venueInfo').each do |top|
-          rank_and_name = top.children[0].children[0].text.split('.')
-          name = rank_and_name[1]
-          rank = rank_and_name[0]
-          rating = top.children[0].children[1].text
-          address = top.children[0].children[2].text
-          type_location = top.children[0].children[3].text.split('·')
-          type = type_location[0].strip
-          location = type_location[1].strip
-          spot_url = "https://foursquare.com#{explore.css('.venueInfo a').attribute('href').value}"
-          all_top_places << top_place = {:name => name,:rank => rank, :rating =>rating, :address => address, :type => type , :location => location, :spot_url => spot_url}
-        end
-      all_top_places
-end
+
 
 def self.scrape_list_page(url)
   html = open(url, "User-Agent"=>"Zombies from Space" )
