@@ -114,7 +114,7 @@ class TrendingThisWeek::CLI
 
   def check_if_info(instance, info)
     if  info.empty?
-      puts "Seems we don't have that information. Please try again!/n/n"
+      puts "Seems we don't have that information. Please try again!\n\n"
      additional_info(instance)
     else
       puts "#{info}"
