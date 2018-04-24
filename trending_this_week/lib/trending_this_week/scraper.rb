@@ -6,6 +6,9 @@ class TrendingThisWeek::Scraper
       attr_accessor :name, :location, :rank_change, :type, :rank, :spot_url, :address, :city, :phone_number,
       :other_info, :all_top_places, :rating, :list_name, :list_url
 
+      # what kind of method could we add to help out with the refactoring suggested in
+      # the Spots class?
+      
     def self.scraper(index_page)
       html = open(index_page)
       trending = Nokogiri::HTML(html)
